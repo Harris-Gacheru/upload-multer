@@ -1,9 +1,11 @@
+<p>{{ message }}</p>
+
 <form [formGroup]="uploadForm">
   <span>Name: </span> <input type="text" formControlName="name">
 
   <br>
   <br>
-  
+
   <input type="file" (change)="onFileChange($event)">
   <button (click)="submit()">Upload</button>
 </form>

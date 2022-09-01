@@ -40,11 +40,14 @@ app.get('/images', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 app.post('/uploads', upload.single('uploaded_file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    console.log(req.file);
     try {
+        const { name } = req.body;
         let pool = yield mssql_1.default.connect(sqlconfig_1.default);
-        yield pool.request().query(`insert into uploads(image)values('${(_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname}')`);
-        res.json({ message: 'Image uploaded successfully', file: req.file });
+        yield pool.request()
+            .input('name', mssql_1.default.VarChar, name)
+            .input('image', mssql_1.default.NVarChar, (_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname)
+            .execute('uploadData');
+        res.json({ message: 'Uploaded successfully', name: name, file: req.file });
     }
     catch (error) {
         res.json({ error: error.message });

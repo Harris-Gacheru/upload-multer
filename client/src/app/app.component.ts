@@ -10,6 +10,7 @@ import { UploadService } from './service/upload.service';
 export class AppComponent implements OnInit{
   title = 'client';
   selectedFile!: File;
+  message: string = ''
 
   uploadForm!: FormGroup;
 
@@ -34,11 +35,21 @@ export class AppComponent implements OnInit{
     let formData = new FormData()
     formData.append('name', this.uploadForm.get('name')?.value)
     formData.append('uploaded_file', this.uploadForm.get('uploaded_file')?.value)
-    console.log(formData.get('uploaded_file'), formData.get('name'))
 
-    // this.uploadService.uploadImage(formData).subscribe(
-    //   res => console.log(res),
-    //   err => console.log(err)
-    // )
+    this.uploadService.uploadImage(formData).subscribe(
+      res => {
+        console.log(res)
+        this.message = res.message
+
+        setTimeout(() => {
+          this.message = ''
+          this.ngOnInit()
+        }, 2000)
+      },
+      err => {
+        console.log(err)
+        this.message = err.message
+      }
+    )
   }
 }

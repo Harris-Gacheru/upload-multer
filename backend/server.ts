@@ -31,12 +31,16 @@ app.get('/images', async(req, res) => {
 })
 
 app.post('/uploads', upload.single('uploaded_file'), async(req, res) => {
-    console.log(req.file)
     try {
-        let pool = await mssql.connect(sqlConfig)
-        await pool.request().query(`insert into uploads(image)values('${req.file?.originalname}')`)
+        const { name } = req.body as { name:string }
 
-        res.json({message: 'Image uploaded successfully', file: req.file})        
+        let pool = await mssql.connect(sqlConfig)
+        await pool.request()
+        .input('name', mssql.VarChar, name)
+        .input('image', mssql.NVarChar, req.file?.originalname)
+        .execute('uploadData')
+
+        res.json({message: 'Uploaded successfully', name: name, file: req.file})        
     } catch (error: any) {
         res.json({error: error.message})
     }
