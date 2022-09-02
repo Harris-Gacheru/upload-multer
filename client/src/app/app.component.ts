@@ -11,6 +11,7 @@ export class AppComponent implements OnInit{
   title = 'client';
   selectedFile!: File;
   message: string = ''
+  error: string = ''
 
   uploadForm!: FormGroup;
   uploads: {id: number, name: string, image: any, createdat: Date}[] = []
@@ -59,7 +60,7 @@ export class AppComponent implements OnInit{
       },
       err => {
         console.log(err)
-        this.message = err.message
+        this.error = err.message
       }
     )
   }

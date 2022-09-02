@@ -1,20 +1,32 @@
-<p>{{ message }}</p>
+<div class="tw-h-screen tw-w-screen tw-overflow-y-auto tw-p-10">
+  <div class="">
+    <p class="tw-text-green-700 tw-mb-4">{{ message }}</p>
+    <p class="tw-text-red-700 tw-mb-4">{{ error }}</p>
+    <h4 class="tw-font-semibold">Fill in the form</h4>
 
-<form [formGroup]="uploadForm">
-  <span>Name: </span> <input type="text" formControlName="name">
+    <form [formGroup]="uploadForm" class="tw-my-6">
+      <div class="tw-mb-4">
+        <span>Name: </span> <input type="text" formControlName="name" class="tw-border tw-border-gray-400 tw-px-4 tw-py-1 tw-rounded">
+      </div>
 
-  <br>
-  <br>
+      <div class="tw-mb-4">
+        <input type="file" (change)="onFileChange($event)">
+      </div>
 
-  <input type="file" (change)="onFileChange($event)">
-  <button (click)="submit()">Upload</button>
-</form>
+      <button (click)="submit()" class="tw-bg-gray-200 tw-border tw-border-black tw-px-4 tw-py-1 tw-rounded tw-w-40 tw-mt-6 hover:tw-text-gray-500">Upload</button>
+    </form>
+  </div>
 
-<div>
-  <p *ngIf="uploads.length === 0">No uploads available..</p>
+  <div class="tw-border tw-border-gray-500 tw-rounded-lg tw-p-4">
+    <p *ngIf="uploads.length === 0" class="tw-text-gray-500">No uploads available..</p>
 
-  <div *ngFor="let upload of uploads">
-    <img src="http://localhost:4000/Images/{{ upload.image }}" alt="{{ upload.name }} img">
-    <p>{{ upload.name }}</p>
+    <div class="tw-flex tw-items-center tw-flex-wrap tw-gap-4">
+      <div class="tw-shadow tw-w-52 tw-h-60" *ngFor="let upload of uploads">
+        <div class="tw-bg-gray-100 tw-w-full tw-h-52">
+          <img src="http://localhost:4000/Images/{{ upload.image }}" alt="{{ upload.name }} img" class="tw-w-full tw-h-full">
+        </div>
+        <p class="tw-text-center tw-py-1 tw-font-semibold">{{ upload.name }}</p>
+      </div>
+    </div>
   </div>
 </div>
