@@ -19,20 +19,21 @@ const mssql_1 = __importDefault(require("mssql"));
 const sqlconfig_1 = __importDefault(require("./config/sqlconfig"));
 const app = (0, express_1.default)();
 const PORT = 4000;
-const upload = (0, multer_1.default)({ dest: 'uploads/' });
+const upload = (0, multer_1.default)({ dest: 'Images/' });
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+app.use('/Images', express_1.default.static('Images'));
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send('Image Upload');
 }));
-app.get('/images', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/uploads', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let pool = yield mssql_1.default.connect(sqlconfig_1.default);
-        const images = yield pool.request().query('select * from uploads');
-        if (images.recordset.length > 0) {
-            return res.json({ images: images.recordset });
+        const uploads = yield pool.request().query('select * from uploads');
+        if (uploads.recordset.length > 0) {
+            return res.json({ uploads: uploads.recordset });
         }
-        res.json({ message: 'No images uploaded' });
+        res.json({ message: 'No uploads' });
     }
     catch (error) {
         res.json({ error: error.message });
@@ -45,7 +46,7 @@ app.post('/uploads', upload.single('uploaded_file'), (req, res) => __awaiter(voi
         let pool = yield mssql_1.default.connect(sqlconfig_1.default);
         yield pool.request()
             .input('name', mssql_1.default.VarChar, name)
-            .input('image', mssql_1.default.NVarChar, (_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname)
+            .input('image', mssql_1.default.NVarChar, (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename)
             .execute('uploadData');
         res.json({ message: 'Uploaded successfully', name: name, file: req.file });
     }

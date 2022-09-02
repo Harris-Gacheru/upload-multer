@@ -9,3 +9,12 @@
   <input type="file" (change)="onFileChange($event)">
   <button (click)="submit()">Upload</button>
 </form>
+
+<div>
+  <p *ngIf="uploads.length === 0">No uploads available..</p>
+
+  <div *ngFor="let upload of uploads">
+    <img src="http://localhost:4000/Images/{{ upload.image }}" alt="{{ upload.name }} img">
+    <p>{{ upload.name }}</p>
+  </div>
+</div>
